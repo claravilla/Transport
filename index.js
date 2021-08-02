@@ -16,7 +16,7 @@ app.get("/", function(req,res){
 });
 
 app.get("/status", function(req,res){
-  let url = "https://api.tfl.gov.uk/Line/circle/Status?primary_key=14e37b0c2c9c479095152adea2cf5861&secondary_key=3c82b7114f7242c09111fa869c84c651"
+  let url = "https://api.tfl.gov.uk/Line/circle/Status?primary_key="+process.env.PRIMARY_KEY+"&secondary_key="+process.env.SECONDARY_KEY
 
 https.request(url, function(err, response){
     if (err) {
