@@ -1,0 +1,68 @@
+body {
+    background-color: rgb(194, 243, 227);
+    font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+    margin:auto;
+    font-size: 2rem;
+    font-weight: bold;
+    color:cornflowerblue;
+}
+
+img {
+    height:5%;
+    width:5%;
+}
+
+.tubeUpdate {
+    display: flex;
+    flex-direction: row;
+    background-color: cadetblue;
+    width:30%;
+}
+
+.tube {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+
+}
+
+.status {
+    background-color: orangered;
+}
+.line {
+    text-align: center;
+    font-weight: 600;
+    padding:1%;
+}
+.piccadilly {
+    background-color: darkblue;
+    color:white;
+    
+}
+
+.victoria {
+    background-color:deepskyblue;
+    color:white;
+  
+}
+
+.circle {
+    background-color:yellow;
+    color:black;
+}
+
+.northern {
+    background-color:black;
+    color:white;
+}
+
+.green {
+    background-color: green;
+}
+
+.red{
+    background-color: red;
+}
