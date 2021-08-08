@@ -37,16 +37,17 @@ https.get(url, function(response){
         console.log(response.headers);
         console.log("-------------------------------");
         let responseBody = "";
-        let parsedBody = [];
+        let parsedBody = "";
+        let tubeStatus = ""
         response.setEncoding("utf-8");
-        response.on("data", function(chunk){
+        response.on("data", function(chunk){    //getting all chunks of data
             responseBody += chunk;
             // responseBody += JSON.parse(JSON.stringify(chunk));
-            console.log("this is the body response"+responseBody);
-            console.log("-------------------------------");
-            console.log("this is the body response lenght"+responseBody.length);
-            console.log("this is the body position 0 "+responseBody[0]);
-            console.log("this is the body position 1 "+responseBody[1]);
+            // console.log("this is the body response"+responseBody);
+            // console.log("-------------------------------");
+            // console.log("this is the body response lenght"+responseBody.length);
+            // console.log("this is the body position 0 "+responseBody[0]);
+            // console.log("this is the body position 1 "+responseBody[1]);
 
 
 
@@ -58,8 +59,17 @@ https.get(url, function(response){
             // console.log(parsedBody);
             // const parsedBody = JSON.parse(responseBody);
             // console.log(parsedBody);
-        });     
-        res.redirect("/");
+        });  
+
+        response.on ("end", function(){   //parsing when all data are received
+            parsedBody = JSON.parse(responseBody);
+            console.log(parsedBody); 
+            console.log("-------------------------------");
+            console.log(parsedBody[0].lineStatuses[0].statusSeverityDescription);
+            tubeStatus = parsedBody[0].lineStatuses[0].statusSeverityDescription;
+            console.log (tubeStatus);
+        })   
+        res.render("index", {"victoriaStatus":tubeStatus});
 });
 
 

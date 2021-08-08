@@ -18,7 +18,7 @@ img {
 .tubeUpdate {
     display: flex;
     flex-direction: row;
-    background-color: cadetblue;
+    /* background-color: cadetblue; */
     width:30%;
 }
 
@@ -30,7 +30,7 @@ img {
 }
 
 .status {
-    background-color: orangered;
+    /* background-color: orangered; */
 }
 .line {
     text-align: center;
