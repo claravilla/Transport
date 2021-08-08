@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 const tube = ["piccadilly","victoria","circle","norther"];
 
 // const options = {
-//     hostname: "https://api.tfl.gov.uk/Line/victoria/Status?app_id=14e37b0c2c9c479095152adea2cf5861&app_key=3c82b7114f7242c09111fa869c84c651",
+//     hostname: "https://api.tfl.gov.uk/Line/victoria/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY,
 //     method: "GET",
 //     headers:{
 //         "Content-Type": "application/json"
@@ -27,15 +27,38 @@ app.get("/", function(req,res){
 
 app.get("/status", function(req,res){
 
-const url="https://api.tfl.gov.uk/Line/victoria/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
+ const url="https://api.tfl.gov.uk/Line/victoria/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
 
-https.get(url, function(err, response){
-        console.log = ("this is the res "+response);
-        console.log = (err);
-        // response.on("data", function(data){
-        //     const tflData = JSON.parse(data);
-        //     console.log(tflData);
-        // });     
+https.get(url, function(response){
+        console.log (response);
+        console.log("-------------------------------");
+        console.log(response.statusCode);
+        console.log("-------------------------------");
+        console.log(response.headers);
+        console.log("-------------------------------");
+        let responseBody = "";
+        let parsedBody = [];
+        response.setEncoding("utf-8");
+        response.on("data", function(chunk){
+            responseBody += chunk;
+            // responseBody += JSON.parse(JSON.stringify(chunk));
+            console.log("this is the body response"+responseBody);
+            console.log("-------------------------------");
+            console.log("this is the body response lenght"+responseBody.length);
+            console.log("this is the body position 0 "+responseBody[0]);
+            console.log("this is the body position 1 "+responseBody[1]);
+
+
+
+            // for (i=0;i<responseBody.length;i++){
+            //     let object = JSON.parse(responseBody[i]);
+            //     parsedBody.push(object);
+            // };
+
+            // console.log(parsedBody);
+            // const parsedBody = JSON.parse(responseBody);
+            // console.log(parsedBody);
+        });     
         res.redirect("/");
 });
 
