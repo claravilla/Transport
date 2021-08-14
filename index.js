@@ -22,15 +22,15 @@ const tube = ["piccadilly","victoria","circle","norther"];
 
 
 app.get("/", function(req,res){
-    res.render("index", {"victoriaStatus":123});
+    res.render("index", {"piccadillyStatus":123});
 });
 
 app.get("/status", function(req,res){
 
- const url="https://api.tfl.gov.uk/Line/victoria/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
+ const url="https://api.tfl.gov.uk/Line/piccadilly/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
  let responseBody = "";
  let parsedBody = "";
- let tubeStatus = "";
+ let piccadillyTubeStatus = "";
 
 https.get(url, function(response){
         // console.log (response);
@@ -43,36 +43,22 @@ https.get(url, function(response){
         response.setEncoding("utf-8");
         response.on("data", function(chunk){    //getting all chunks of data
             responseBody += chunk;
-            // responseBody += JSON.parse(JSON.stringify(chunk));
-            // console.log("this is the body response"+responseBody);
-            // console.log("-------------------------------");
-            // console.log("this is the body response lenght"+responseBody.length);
-            // console.log("this is the body position 0 "+responseBody[0]);
-            // console.log("this is the body position 1 "+responseBody[1]);
-
-
-
-            // for (i=0;i<responseBody.length;i++){
-            //     let object = JSON.parse(responseBody[i]);
-            //     parsedBody.push(object);
-            // };
-
-            // console.log(parsedBody);
-            // const parsedBody = JSON.parse(responseBody);
-            // console.log(parsedBody);
         });  
 
-        response.on ("end", function(){   //parsing when all data are received
+        response.on ("end", function(){   //parsing when all data is received
             parsedBody = JSON.parse(responseBody);
             console.log(parsedBody); 
             console.log("-------------------------------");
-            tubeStatus = parsedBody[0].lineStatuses[0].statusSeverityDescription;          
-            console.log("this is the status "+tubeStatus);
+            piccadillyTubeStatus = parsedBody[0].lineStatuses[0].statusSeverityDescription;          
+            console.log("this is the status "+piccadillyTubeStatus);
+            res.render("index", {"piccadillyStatus": piccadillyTubeStatus});
         });
-});
-console.log(tubeStatus);
-res.render("index", {"victoriaStatus": tubeStatus});
 
+ 
+    });
+
+
+});
 
 // for (i=0;i<tube.length;i++){
 //  let url = "https://api.tfl.gov.uk/Line/"+tube[i]+"/Status?primary_key="+process.env.PRIMARY_KEYc+"&scondary_key="+process.env.SECONDARY_KEY  
@@ -86,7 +72,7 @@ res.render("index", {"victoriaStatus": tubeStatus});
 //  })
 // }
 
-});
+
 
 
 
