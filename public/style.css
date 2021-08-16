@@ -30,8 +30,9 @@ img {
 }
 
 .status {
-    /* background-color: orangered; */
+    width: 50%;
 }
+
 .line {
     text-align: center;
     font-weight: 600;
@@ -61,9 +62,24 @@ img {
 
 .green {
     background-color: green;
+    color:white;
+    text-align: center;
+    font-weight: 600;
+    padding:1%;
 }
 
 .red{
     background-color: red;
     color:white;
+    text-align: center;
+    font-weight: 600;
+    padding:1%;
+}
+
+.orange {
+    background-color: orange;
+    color:black;
+    text-align: center;
+    font-weight: 600;
+    padding:1%;
 }
