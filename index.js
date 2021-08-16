@@ -10,27 +10,34 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 
-const tube = ["piccadilly","victoria","circle","norther"];
+const tube = ["piccadilly","victoria","circle","northern"];
+let tubeStatus = [];
 
-// const options = {
-//     hostname: "https://api.tfl.gov.uk/Line/victoria/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY,
-//     method: "GET",
-//     headers:{
-//         "Content-Type": "application/json"
-//     }
-// };
+let url = "";
+let responseBody = "";
+let parsedBody = "";
+let piccadillyTubeStatus = "";
+let victoriaTubeStatus = "";
+let circleTubeStatus = "";
+let northerTubeStatus = "";
+
+
+// for loop and use te i position in the array tube in url, tubeStatus variable i.e url +tube[i]+ and then tube[i]+TubeStatus
+// so all 4 var should be updated and then you can res.render with the 4 status
 
 
 app.get("/", function(req,res){
-    res.render("index", {"piccadillyStatus":123});
+    res.render("index", {"piccadillyStatus":123, "piccadillyClass":"green"});
 });
 
 app.get("/status", function(req,res){
 
- const url="https://api.tfl.gov.uk/Line/piccadilly/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
- let responseBody = "";
- let parsedBody = "";
- let piccadillyTubeStatus = "";
+    // for (i=0;i<tube.length;i++){
+    //     console.log(i);
+    //     console.log(tube[i]);
+
+url="https://api.tfl.gov.uk/Line/"+tube[0]+"/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
+
 
 https.get(url, function(response){
         // console.log (response);
@@ -49,28 +56,32 @@ https.get(url, function(response){
             parsedBody = JSON.parse(responseBody);
             console.log(parsedBody); 
             console.log("-------------------------------");
-            piccadillyTubeStatus = parsedBody[0].lineStatuses[0].statusSeverityDescription;          
-            console.log("this is the status "+piccadillyTubeStatus);
-            res.render("index", {"piccadillyStatus": piccadillyTubeStatus});
+            tubeStatus[0] = parsedBody[0].lineStatuses[0].statusSeverityDescription;           
+            console.log("this is the status "+tubeStatus[0]+" of "+tube[0]);
+            switch (tubeStatus[0]) {
+               case "Good Service":
+                   piccadillyTubeStatus = "green";
+                   break;
+                case "Minor Delays":
+                    piccadillyTubeStatus = "orange";
+                    break;
+                case "Severe Delays":
+                    piccadillyTubeStatus = "red";
+                    break;
+                default: "green";
+            };
+            console.log(piccadillyTubeStatus);
+            res.render("index", {"piccadillyStatus": tubeStatus[0], "piccadillyClass":piccadillyTubeStatus});
+            
         });
-
  
     });
 
-
-});
-
-// for (i=0;i<tube.length;i++){
-//  let url = "https://api.tfl.gov.uk/Line/"+tube[i]+"/Status?primary_key="+process.env.PRIMARY_KEYc+"&scondary_key="+process.env.SECONDARY_KEY  
-//  https.request(url, function (err,response){
-//      if (err) {
-//          console.log (err);
-//      } else {
-//         console.log(response);
-//      }
     
-//  })
-// }
+ // };  closing for loop  
+
+//  res.render("index", {"piccadillyStatus": tubeStatus[0]});
+});
 
 
 
