@@ -91,3 +91,11 @@ img {
     font-weight: 600;
     padding:1%;
 }
+
+.lightgrey {
+    background-color: lightgrey;
+    color:black;
+    text-align: center;
+    font-weight: 600;
+    padding:1%;
+}
