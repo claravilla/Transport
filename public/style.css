@@ -83,3 +83,11 @@ img {
     font-weight: 600;
     padding:1%;
 }
+
+.grey {
+    background-color: grey;
+    color:black;
+    text-align: center;
+    font-weight: 600;
+    padding:1%;
+}

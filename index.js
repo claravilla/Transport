@@ -3,6 +3,7 @@ const https = require("https");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv").config();
 const ejs = require("ejs");
+const axios = require('axios');
 
 const app = express();
 
@@ -19,68 +20,91 @@ let parsedBody = "";
 let piccadillyTubeStatus = "";
 let victoriaTubeStatus = "";
 let circleTubeStatus = "";
-let northerTubeStatus = "";
+let northernTubeStatus = "";
 
-
-// for loop and use te i position in the array tube in url, tubeStatus variable i.e url +tube[i]+ and then tube[i]+TubeStatus
-// so all 4 var should be updated and then you can res.render with the 4 status
 
 
 app.get("/", function(req,res){
-    res.render("index", {"piccadillyStatus":123, "piccadillyClass":"green"});
-});
-
-app.get("/status", function(req,res){
-
-    // for (i=0;i<tube.length;i++){
-    //     console.log(i);
-    //     console.log(tube[i]);
 
 url="https://api.tfl.gov.uk/Line/"+tube[0]+"/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
+  axios.get(url)
+  .then ((data)=>{
+      tubeStatus.push(data.data[0].lineStatuses[0].statusSeverityDescription);
+      switch (tubeStatus[0]) {
+                       case "Good Service":
+                           piccadillyTubeStatus = "green";
+                           break;
+                        case "Minor Delays":
+                            piccadillyTubeStatus = "orange";
+                            break;
+                        case "Severe Delays":
+                            piccadillyTubeStatus = "red";
+                            break;
+                        default: 
+                        piccadillyTubeStatus = "grey";
+                    };
+      url = "https://api.tfl.gov.uk/Line/"+tube[1]+"/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
+      return axios.get(url);
+  })
+  .then((data)=>{
+    tubeStatus.push(data.data[0].lineStatuses[0].statusSeverityDescription);
+      switch (tubeStatus[1]) {
+                       case "Good Service":
+                           victoriaTubeStatus = "green";
+                           break;
+                        case "Minor Delays":
+                            victoriaTubeStatus = "orange";
+                            break;
+                        case "Severe Delays":
+                            victoriaTubeStatus = "red";
+                            break;
+                        default: 
+                        victoriaTubeStatus = "grey";
+                    };
+    url = "https://api.tfl.gov.uk/Line/"+tube[2]+"/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
+    return axios.get(url);
+})
+.then((data)=>{
+    tubeStatus.push(data.data[0].lineStatuses[0].statusSeverityDescription);
+    switch (tubeStatus[2]) {
+                     case "Good Service":
+                         circleTubeStatus = "green";
+                         break;
+                      case "Minor Delays":
+                          circleTubeStatus = "orange";
+                          break;
+                      case "Severe Delays":
+                          circleTubeStatus = "red";
+                          break;
+                      default: 
+                      circleTubeStatus = "grey";
+                  };
+    url = "https://api.tfl.gov.uk/Line/"+tube[3]+"/Status?app_id="+process.env.PRIMARY_KEY+"&app_key="+process.env.SECONDARY_KEY;
+    return axios.get(url);
+})
+.then((data)=>{
+    tubeStatus.push(data.data[0].lineStatuses[0].statusSeverityDescription);
+    switch (tubeStatus[3]) {
+                     case "Good Service":
+                         northernTubeStatus = "green";
+                         break;
+                      case "Minor Delays":
+                          northernTubeStatus = "orange";
+                          break;
+                      case "Severe Delays":
+                          northernTubeStatus = "red";
+                          break;
+                      default: 
+                      northernTubeStatus = "grey";
+                  };
 
+    console.log (`piccadilly: ${piccadillyTubeStatus} victoria: ${victoriaTubeStatus} circle: ${circleTubeStatus} northern ${northernTubeStatus}`);
 
-https.get(url, function(response){
-        // console.log (response);
-        // console.log("-------------------------------");
-        // console.log(response.statusCode);
-        // console.log("-------------------------------");
-        // console.log(response.headers);
-        // console.log("-------------------------------");
-        
-        response.setEncoding("utf-8");
-        response.on("data", function(chunk){    //getting all chunks of data
-            responseBody += chunk;
-        });  
+    res.render("index", {"piccadillyStatus": tubeStatus[0], "piccadillyClass":piccadillyTubeStatus, "victoriaStatus": tubeStatus[1], "victoriaClass":victoriaTubeStatus,
+    "circleStatus": tubeStatus[2], "circleClass":circleTubeStatus, "northernStatus": tubeStatus[3], "northernClass":northernTubeStatus})
+})
+  .catch((error)=> {console.log(error)});
 
-        response.on ("end", function(){   //parsing when all data is received
-            parsedBody = JSON.parse(responseBody);
-            console.log(parsedBody); 
-            console.log("-------------------------------");
-            tubeStatus[0] = parsedBody[0].lineStatuses[0].statusSeverityDescription;           
-            console.log("this is the status "+tubeStatus[0]+" of "+tube[0]);
-            switch (tubeStatus[0]) {
-               case "Good Service":
-                   piccadillyTubeStatus = "green";
-                   break;
-                case "Minor Delays":
-                    piccadillyTubeStatus = "orange";
-                    break;
-                case "Severe Delays":
-                    piccadillyTubeStatus = "red";
-                    break;
-                default: "green";
-            };
-            console.log(piccadillyTubeStatus);
-            res.render("index", {"piccadillyStatus": tubeStatus[0], "piccadillyClass":piccadillyTubeStatus});
-            
-        });
- 
-    });
-
-    
- // };  closing for loop  
-
-//  res.render("index", {"piccadillyStatus": tubeStatus[0]});
 });
 
 
